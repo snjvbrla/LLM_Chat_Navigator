@@ -230,6 +230,11 @@ html[dark] {
     border-radius: 12px;
 }
 
+#gpt-prompt-list {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
 #gpt-prompt-list::-webkit-scrollbar {
     width: 6px;
 }

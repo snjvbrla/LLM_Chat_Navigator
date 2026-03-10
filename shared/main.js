@@ -208,18 +208,21 @@
             return;
         }
 
-        let minLevel = 6;
-        headings.forEach(h => {
-            const lvl = parseInt(h.tagName[1]);
-            if (lvl < minLevel) minLevel = lvl;
-        });
+        // 收集所有实际出现的标题层级，排序去重后建立紧凑映射
+        // 这样即使最高级标题不是 h1，或者中间有跳过的层级，都能正确显示
+        const presentLevels = [...new Set(
+            Array.from(headings).map(h => parseInt(h.tagName[1]))
+        )].sort((a, b) => a - b);
+
+        const levelMap = {};
+        presentLevels.forEach((lvl, idx) => { levelMap[lvl] = idx; });
 
         outlinePanel.classList.remove('hidden');
         outlineList.innerHTML = '';
 
         headings.forEach(heading => {
             const level = parseInt(heading.tagName[1]);
-            const rel = level - minLevel;
+            const rel = levelMap[level];
             if (rel > _outlineMaxLevel) return;
 
             const item = document.createElement('div');
